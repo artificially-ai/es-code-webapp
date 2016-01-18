@@ -138,7 +138,7 @@
           </includes>
           <repositoryName>mvn-repo</repositoryName>
           <repositoryOwner>ekholabs</repositoryOwner>
-          <userName>wilderrodrigues</userName>
+          <userName>ekho-bot</userName>
           <oauth2Token>${GITHUB_TOKEN}</oauth2Token>
         </configuration>
         <executions>
