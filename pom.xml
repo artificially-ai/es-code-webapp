@@ -130,7 +130,7 @@
         <version>0.12</version>
         <configuration>
           <message>Maven artifacts for es-code-webapp ${project.version}</message>
-          <noJekyll>true</noJekyll>
+          <noJekyll>false</noJekyll>
           <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
           <branch>refs/heads/es-code-webapp</branch>
           <includes>
