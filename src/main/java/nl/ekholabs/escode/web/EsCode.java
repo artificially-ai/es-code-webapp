@@ -1,22 +1,30 @@
 package nl.ekholabs.escode.web;
 
+import java.io.*;
+import java.util.Optional;
+
+import javax.swing.JFrame;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-@Controller
-@EnableAutoConfiguration
+@SpringBootApplication
 public class EsCode {
+  
+    public  static String ROOT_GENERATE = "generate-dir";
+    public  static String ROOT_PARSE = "parse-dir";
 
-  @RequestMapping("/")
-  @ResponseBody
-  String home() {
-    return "Hello World!";
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(EsCode.class, args);
+    }
 
-  public static void main(String[] args) throws Exception {
-    SpringApplication.run(EsCode.class, args);
-  }
+    @Bean
+    CommandLineRunner init() {
+        return (String[] args) -> {
+            new File(ROOT_GENERATE).mkdir();
+            new File(ROOT_PARSE).mkdir();
+        };
+    }
 }
