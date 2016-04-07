@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body bgcolor="#CCFF99">
+
+	<div th:if="${message}">
+		<h2 th:text="${message}"/>
+	</div>
+
+	<div>
+		<form  method="POST" enctype="multipart/form-data" action="/parse">
+			<table>
+				<tr>
+					<td>File to generate:</td><td><input type="file" name="file" /></td>
+					<td></td><td><input type="submit" value="parse" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div>
+		<ul>
+			<li th:each="file : ${files}" th:text="${file}"></li>
+		</ul>
+	</div>
+
+</body>
+</html>
