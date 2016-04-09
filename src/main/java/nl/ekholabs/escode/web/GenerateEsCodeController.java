@@ -33,18 +33,15 @@ public class GenerateEsCodeController {
   }
   
 	@RequestMapping(method = RequestMethod.GET, value = "/generate")
-	public String provideUploadInfo(Model model) {
+	public String provideInfo(Model model) {
+	  // sorting file
 		File rootFolder = new File(EsCode.ROOT_GENERATE);
 		List<String> fileNames = Arrays.stream(rootFolder.listFiles())
-			.map(f -> f.getName())
-			.collect(Collectors.toList());
+        .sorted(Comparator.comparingLong(f -> -1 * f.lastModified()))
+        .map(f -> f.getName())
+        .collect(Collectors.toList());
 
-		model.addAttribute("files",
-			Arrays.stream(rootFolder.listFiles())
-					.sorted(Comparator.comparingLong(f -> -1 * f.lastModified()))
-					.map(f -> f.getName())
-					.collect(Collectors.toList())
-		);
+		model.addAttribute("files",fileNames);
 
 		return "generateForm";
 	}
@@ -58,14 +55,12 @@ public class GenerateEsCodeController {
 				BufferedOutputStream stream = new BufferedOutputStream(
 						new FileOutputStream(new File(EsCode.ROOT_GENERATE + "/" + file.getOriginalFilename())));
         FileCopyUtils.copy(file.getInputStream(), stream);   
-        
-				stream.close();
-				redirectAttributes.addFlashAttribute("message",
-						"You successfully generated " + file.getOriginalFilename() + "!");
-				
+        stream.close();
+        redirectAttributes.addFlashAttribute("message",
+            "You successfully generated the ES-Code image for " + file.getOriginalFilename() + "!");
 				//generating
 				File uploadedFile=new File(EsCode.ROOT_GENERATE+"/",file.getOriginalFilename());
-				new GenerateEsCodeAction(uploadedFile).generateFile();				
+				new GenerateEsCodeAction(uploadedFile).generateFile();
 			}
 			catch (Exception e) {
 				redirectAttributes.addFlashAttribute("message",
@@ -79,5 +74,4 @@ public class GenerateEsCodeController {
 
 		return "redirect:generate";
 	}
-
 }

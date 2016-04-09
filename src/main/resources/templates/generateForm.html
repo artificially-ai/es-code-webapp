@@ -2,20 +2,36 @@
 <body bgcolor="#CCDDFF">
 
 	<div th:if="${message}">
-		<h2 th:text="${message}"/>
+		<h2 th:text="${message}">Generate ES-Code image Here!</h2>
 	</div>
 
 	<div>
-		<form  method="POST" enctype="multipart/form-data" action="/generate">
+		<form  name="demo" method="POST" enctype="multipart/form-data" action="/generate">
 			<table>
 				<tr>
-					<td>File to generate:</td><td><input type="file" name="file" /></td>
-					<td></td><td><input type="submit" value="generate" /></td>
+					<td>File to generate:</td><td><input type="file" name="file" /></td>					
+				</tr>
+				<hr />
+				<tr>
+					<td><input type="button" value="generate" onclick="generate()" /></td>
+					<td><input type="button" value="download" onclick="download()" /></td>					
 				</tr>
 			</table>
 		</form>
+		
+		<script>
+		function generate(){
+		    document.demo.action="/generate";
+		    document.demo.submit();
+		}
+		
+		function download(){
+		    document.demo.action="/downloadGenerated";
+		    document.demo.submit();
+		}
+		</script>
 	</div>
-
+	<hr />
 	<div>
 		<ul>
 			<li th:each="file : ${files}" th:text="${file}"></li>

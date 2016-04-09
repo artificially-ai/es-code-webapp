@@ -2,20 +2,36 @@
 <body bgcolor="#CCFF99">
 
 	<div th:if="${message}">
-		<h2 th:text="${message}"/>
+		<h2 th:text="${message}">Parse ES-Code image Here!</h2>
 	</div>
 
 	<div>
-		<form  method="POST" enctype="multipart/form-data" action="/parse">
+		<form  name="demo" method="POST" enctype="multipart/form-data" action="/parse">
 			<table>
 				<tr>
-					<td>File to generate:</td><td><input type="file" name="file" /></td>
-					<td></td><td><input type="submit" value="parse" /></td>
+					<td>File to parse:</td><td><input type="file" name="file" /></td>					
+				</tr>
+				<hr />
+				<tr>
+					<td><input type="button" value="parse" onclick="parse()" /></td>
+					<td><input type="button" value="download" onclick="download()" /></td>					
 				</tr>
 			</table>
 		</form>
+		
+		<script>
+		function parse(){
+		    document.demo.action="/parse";
+		    document.demo.submit();
+		}
+		
+		function download(){
+		    document.demo.action="/downloadParsed";
+		    document.demo.submit();
+		}
+		</script>
 	</div>
-
+	<hr />
 	<div>
 		<ul>
 			<li th:each="file : ${files}" th:text="${file}"></li>

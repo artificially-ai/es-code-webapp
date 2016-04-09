@@ -26,39 +26,34 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ParseEsCodeController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/parse")
-	public String provideUploadInfo(Model model) {
+	public String provideInfo(Model model) {
+	  // sorting file
 		File rootFolder = new File(EsCode.ROOT_PARSE);
 		List<String> fileNames = Arrays.stream(rootFolder.listFiles())
-			.map(f -> f.getName())
-			.collect(Collectors.toList());
+        .sorted(Comparator.comparingLong(f -> -1 * f.lastModified()))
+        .map(f -> f.getName())
+        .collect(Collectors.toList());
 
-		model.addAttribute("files",
-			Arrays.stream(rootFolder.listFiles())
-					.sorted(Comparator.comparingLong(f -> -1 * f.lastModified()))
-					.map(f -> f.getName())
-					.collect(Collectors.toList())
-		);
+		model.addAttribute("files",fileNames);
 
 		return "parseForm";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/parse")
 	public String handleFileUpload(
-								   @RequestParam("file") MultipartFile file,
+	                 @RequestParam("file") MultipartFile file,
 								   RedirectAttributes redirectAttributes) {
 		if (!file.isEmpty()) {
 			try {
 				BufferedOutputStream stream = new BufferedOutputStream(
 						new FileOutputStream(new File(EsCode.ROOT_PARSE + "/" + file.getOriginalFilename())));
         FileCopyUtils.copy(file.getInputStream(), stream);   
-        
-				stream.close();
-				redirectAttributes.addFlashAttribute("message",
-						"You successfully parsed " + file.getOriginalFilename() + "!");
-				
-				//generating
-				File uploadedFile=new File(EsCode.ROOT_PARSE,file.getOriginalFilename());
-				new ParseEsCodeAction( uploadedFile).parseFile();				
+        stream.close();
+        redirectAttributes.addFlashAttribute("message",
+            "You successfully parsed the ES-Code image for " + file.getOriginalFilename() + "!");
+				//parsing
+				File uploadedFile=new File(EsCode.ROOT_PARSE+"/",file.getOriginalFilename());
+				new ParseEsCodeAction(uploadedFile).parseFile();;
 			}
 			catch (Exception e) {
 				redirectAttributes.addFlashAttribute("message",
@@ -67,10 +62,9 @@ public class ParseEsCodeController {
 		}
 		else {
 			redirectAttributes.addFlashAttribute("message",
-					"You failed to parsed " + file.getOriginalFilename() + " because the file uploaded was empty");
+					"You failed to parseed " + file.getOriginalFilename() + " because the file uploaded was empty");
 		}
 
 		return "redirect:parse";
 	}
-
 }
