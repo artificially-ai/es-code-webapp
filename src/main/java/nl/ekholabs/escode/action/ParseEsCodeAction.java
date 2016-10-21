@@ -1,5 +1,6 @@
 package nl.ekholabs.escode.action;
 
+import nl.ekholabs.escode.utils.ImageUtility;
 import nl.ekholabs.escode.web.EsCode;
 import nl.ekholabs.escode.core.EsCodeParser;
 import nl.ekholabs.escode.graphics.ParsedCanvas;
@@ -33,8 +34,8 @@ public class ParseEsCodeAction {
       final List<Integer> byteBuffer = esCodeParser.extractBytesFromImage(bufferedImage);
       final BufferedImage clone = esCodeParser.createImage(bufferedImage);
       esCodeParser.drawGraphics(clone.getGraphics(), bufferedImage);
-      esCodeParser.persistImage(clone, selectedFile.getParent());
-      esCodeParser.persistRawData(byteBuffer, selectedFile.getParent());
+      ImageUtility.cloneEsCodeImage(clone, selectedFile.getParent());
+      ImageUtility.persistRawData(byteBuffer, selectedFile.getParent());
       
     } catch (final IOException e) {
       System.out.println("e.getMessage()");

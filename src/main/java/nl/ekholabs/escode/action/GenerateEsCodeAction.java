@@ -30,7 +30,7 @@ public class GenerateEsCodeAction {
       
       colours = esCodeGenerator.generateEsColours(selectedFile.getAbsolutePath());
       final BufferedImage generateImage = esCodeGenerator.createImage(colours);
-      esCodeGenerator.drawGraphics(colours, generateImage.getGraphics());
+      esCodeGenerator.drawGraphics(colours, generateImage);
       esCodeGenerator.persistImage(generateImage, selectedFile.getParent());
       
     } catch (final IOException e) {
